@@ -12,7 +12,9 @@
 
 # Deploy and bind the JumpCloud Agent
 
-- import_tasks: prereqs.yml
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS'
-- import_tasks: jumpcloud.yml
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS'
+- name: Install prereqs
+  ansible.builtin.import_tasks: prereqs.yml
+  when: ansible_distribution in ['Ubuntu', 'CentOS', 'Rocky']
+- name: Install JumpCloud Agent
+  ansible.builtin.import_tasks: jumpcloud.yml
+  when: ansible_distribution in ['Ubuntu', 'CentOS', 'Rocky']

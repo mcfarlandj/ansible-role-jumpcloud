@@ -13,16 +13,16 @@
 # Manage prerequisites for this role
 
 - name: (Ubuntu) Update apt-cache
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
   when: ansible_distribution == 'Ubuntu'
 
 - name: Verify curl is installed
-  package:
+  ansible.builtin.package:
     name: curl
     state: present
 
 - name: Check if JumpCloud is already installed
-  stat:
+  ansible.builtin.stat:
     path: /opt/jc
   register: jc_directory

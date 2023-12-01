@@ -12,34 +12,34 @@
 
 # Install the JumpCloud Agent
 
-#- name: Install and deploy the JumpCloud Agent
-#  shell:
-#    cmd: "curl --header 'x-connect-key: {{ jumpcloud.connect_key }}' https://kickstart.jumpcloud.com/Kickstart | sudo bash"
-#    creates: '/opt/jc/jcagent.conf'
-#  when: not jc_directory.stat.exists
+# - name: Install and deploy the JumpCloud Agent
+#   shell:
+#     cmd: "curl --header 'x-connect-key: {{ jumpcloud.connect_key }}' https://kickstart.jumpcloud.com/Kickstart | sudo bash"
+#     creates: '/opt/jc/jcagent.conf'
+#   when: not jc_directory.stat.exists
 
 - name: Grab the JumpCloud Kickstart script
-  get_url:
-    url: 'https://kickstart.jumpcloud.com/Kickstart'
+  ansible.builtin.get_url:
+    url: "https://kickstart.jumpcloud.com/Kickstart"
     headers:
       x-connect-key: "{{ jumpcloud.connect_key }}"
-    dest: '/tmp/jcinstall.sh'
-    mode: 0700
+    dest: "/tmp/jcinstall.sh"
+    mode: "0700"
   when: not jc_directory.stat.exists
 
 - name: Install and deploy the JumpCloud Agent
-  command:
-    cmd: '/tmp/jcinstall.sh'
-    creates: '/opt/jc/jcagent.conf'
+  ansible.builtin.command:
+    cmd: "/tmp/jcinstall.sh"
+    creates: "/opt/jc/jcagent.conf"
   when: not jc_directory.stat.exists
 
 - name: Cleanup install files
-  file:
-    path: '/tmp/jcinstall.sh'
+  ansible.builtin.file:
+    path: "/tmp/jcinstall.sh"
     state: absent
 
 - name: Verify the JumpCloud Agent is running and enabled
-  service:
+  ansible.builtin.service:
     name: jcagent
     enabled: true
     state: started
